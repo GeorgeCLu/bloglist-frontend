@@ -17,9 +17,6 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('some error happened...');
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
 
   // effect hooks
   useEffect(() => {
@@ -36,25 +33,15 @@ const App = () => {
     }
   }, []);
 
-  const addBlog = (event) => {
-    event.preventDefault();
+  const addBlog = (blogObject) => {
     try {
-      const blogObject = {
-        title,
-        author,
-        url,
-        likes: 0,
-      };
       blogService
         .create(blogObject)
         .then((returnedBlog) => {
           setBlogs(blogs.concat(returnedBlog));
           // then(response => {
           // setNotes(notes.concat(response.data))
-          setMessage(`a new blog ${title} by  ${author} added`);
-          setTitle('');
-          setAuthor('');
-          setUrl('');
+          setMessage(`a new blog ${blogObject.title} by  ${blogObject.author} added`);
         });
     } catch (exception) {
       console.log('failed');
@@ -117,15 +104,9 @@ const App = () => {
   );
 
   const addBlogForm = () => (
-    <Togglable buttonLabel="post">
+    <Togglable buttonLabel="new note">
       <BlogForm
-        title={title}
-        author={author}
-        url={url}
-        handleTitleChange={({ target }) => setTitle(target.value)}
-        handleAuthorChange={({ target }) => setAuthor(target.value)}
-        handleUrlChange={({ target }) => setUrl(target.value)}
-        handleSubmit={addBlog}
+        createBlog={addBlog}
       />
     </Togglable>
   );
