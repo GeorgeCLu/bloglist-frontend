@@ -100,7 +100,7 @@ const App = () => {
   );
 
   const addBlogForm = () => (
-    <Togglable buttonLabel="new note" ref={blogFormRef}>
+    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
       <BlogForm
         createBlog={addBlog}
       />
@@ -124,19 +124,16 @@ const App = () => {
       <Notification message={message} />
       <p>
         {user.name}
-        {' '}
-        logged-in
+        {' logged in '}
+        <Button
+          handleClick={handleLogout}
+          text="logout"
+        />
       </p>
-      <button onClick={handleLogout} type="submit">logout</button>
-      <Button
-        handleClick={handleLogout}
-        text="logout"
-      />
+      {addBlogForm()}
       {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
       <br />
       <Footer />
-      <br />
-      {addBlogForm()}
       <br />
     </div>
   );
