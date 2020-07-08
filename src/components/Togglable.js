@@ -3,9 +3,18 @@
 /* eslint-disable react/jsx-filename-extension */
 // display property is none if we do not want the component to be displayed:
 
-import React, { useState } from 'react';
+//  function that creates the component is wrapped inside of a forwardRef function call.
+// This way the component can access the ref that is assigned to it.
 
-const Togglable = (props) => {
+// The component uses the useImperativeHandle hook to make its toggleVisibility function
+// available outside of the component.
+
+// useImperativeHandle function is a React hook,
+// that is used for defining functions in a component
+// which can be invoked from outside of the component.
+import React, { useState, useImperativeHandle } from 'react';
+
+const Togglable = React.forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? 'none' : '' };
@@ -14,6 +23,13 @@ const Togglable = (props) => {
   const toggleVisibility = () => {
     setVisible(!visible);
   };
+
+  // eslint-disable-next-line arrow-body-style
+  useImperativeHandle(ref, () => {
+    return {
+      toggleVisibility,
+    };
+  });
 
   return (
     <div>
@@ -26,6 +42,6 @@ const Togglable = (props) => {
       </div>
     </div>
   );
-};
+});
 
 export default Togglable;

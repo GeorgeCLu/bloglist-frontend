@@ -13,8 +13,6 @@ import loginService from './services/login';
 const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('some error happened...');
 
@@ -33,8 +31,13 @@ const App = () => {
     }
   }, []);
 
+  // ref offers a reference to the component.
+  // The visibility is controlled with the visible variable inside of the Togglable component.
+  const blogFormRef = React.createRef();
+
   const addBlog = (blogObject) => {
     try {
+      blogFormRef.current.toggleVisibility();
       blogService
         .create(blogObject)
         .then((returnedBlog) => {
@@ -52,8 +55,7 @@ const App = () => {
     }
   };
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
         username, password,
@@ -64,8 +66,6 @@ const App = () => {
       );
       blogService.setToken(user.token);
       setUser(user);
-      setUsername('');
-      setPassword('');
     } catch (exception) {
       console.log('failed');
       setMessage('Wrong username or password');
@@ -94,17 +94,13 @@ const App = () => {
   const loginForm = () => (
     <Togglable buttonLabel="login">
       <LoginForm
-        username={username}
-        password={password}
-        handleUsernameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
-        handleSubmit={handleLogin}
+        login={handleLogin}
       />
     </Togglable>
   );
 
   const addBlogForm = () => (
-    <Togglable buttonLabel="new note">
+    <Togglable buttonLabel="new note" ref={blogFormRef}>
       <BlogForm
         createBlog={addBlog}
       />
