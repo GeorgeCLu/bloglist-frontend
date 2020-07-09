@@ -35,6 +35,20 @@ const App = () => {
   // The visibility is controlled with the visible variable inside of the Togglable component.
   const blogFormRef = React.createRef();
 
+  const sortIdAsc = () => {
+    blogService.getAll().then((blogs) => setBlogs(blogs));
+    // no id, could add date field
+    // setBlogs(blogs.sort((a, b) => a.id - b.id).map((blog) => (blog)));
+  };
+
+  const sortLikesAsc = () => {
+    setBlogs(blogs.sort((a, b) => a.likes - b.likes).map((blog) => (blog)));
+  };
+
+  const sortLikesDesc = () => {
+    setBlogs(blogs.sort((a, b) => b.likes - a.likes).map((blog) => (blog)));
+  };
+
   const addBlog = (blogObject) => {
     try {
       blogFormRef.current.toggleVisibility();
@@ -150,6 +164,18 @@ const App = () => {
         />
       </p>
       {addBlogForm()}
+      <Button
+        handleClick={sortIdAsc}
+        text="sort by id asc"
+      />
+      <Button
+        handleClick={sortLikesAsc}
+        text="sort by likes asc"
+      />
+      <Button
+        handleClick={sortLikesDesc}
+        text="sort by likes desc"
+      />
       {blogs.map((blog) => <Blog key={blog.id} blog={blog} like={likeBlog} />)}
       <br />
       <Footer />
