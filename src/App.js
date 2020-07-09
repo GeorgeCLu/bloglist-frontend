@@ -55,6 +55,23 @@ const App = () => {
     }
   };
 
+  const likeBlog = (blogid, blogObject) => {
+    try {
+      blogService
+        .update(blogid, blogObject)
+        .then((returnedBlog) => {
+          setBlogs(blogs.map((blog) => (blog.id !== blogid ? blog : returnedBlog)));
+          setMessage(`liked ${blogObject.title} by  ${blogObject.author}`);
+        });
+    } catch (exception) {
+      console.log('failed');
+      setMessage('Failed to like');
+      // setTimeout(() => {
+      //   setErrorMessage(null);
+      // }, 5000);
+    }
+  };
+
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
@@ -66,6 +83,7 @@ const App = () => {
       );
       blogService.setToken(user.token);
       setUser(user);
+      setMessage('logged in');
     } catch (exception) {
       console.log('failed');
       setMessage('Wrong username or password');
@@ -81,6 +99,7 @@ const App = () => {
       window.localStorage.removeItem('loggedBlogappUser');
       blogService.setToken('');
       setUser(null);
+      console.log('logged out');
     } catch (exception) {
       console.log('failed to log out');
       // setErrorMessage('Wrong credentials');
@@ -131,7 +150,7 @@ const App = () => {
         />
       </p>
       {addBlogForm()}
-      {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
+      {blogs.map((blog) => <Blog key={blog.id} blog={blog} like={likeBlog} />)}
       <br />
       <Footer />
       <br />

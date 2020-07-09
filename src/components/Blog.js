@@ -1,14 +1,34 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, like }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
+  };
+
+  const { title } = blog;
+  const { author } = blog;
+  const { url } = blog;
+  let { likes } = blog;
+  const { id } = blog;
+
+  const likeBlog = (event) => {
+    likes += 1;
+    event.preventDefault();
+    like(
+      id,
+      {
+        title,
+        author,
+        url,
+        likes,
+      },
+    );
   };
 
   const [visible, setVisible] = useState(false);
@@ -36,7 +56,7 @@ const Blog = ({ blog }) => {
         <br />
         {'likes '}
         {blog.likes}
-        <button type="submit" onClick={null}>like</button>
+        <button type="submit" onClick={likeBlog}>like</button>
         <br />
         {blog.author}
       </div>
