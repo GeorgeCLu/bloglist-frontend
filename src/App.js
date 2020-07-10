@@ -86,6 +86,26 @@ const App = () => {
     }
   };
 
+  const deleteBlog = (blogObject, blogid) => {
+    try {
+      // need ` not '
+      if (window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)) {
+        blogService
+          .del(blogid)
+          .then(() => {
+            setBlogs(blogs.filter(((blog) => (blog.id !== blogid))));
+            setMessage(`deleted ${blogObject.title} by  ${blogObject.author}`);
+          });
+      }
+    } catch (exception) {
+      console.log('failed');
+      setMessage('Failed to delete');
+      // setTimeout(() => {
+      //   setErrorMessage(null);
+      // }, 5000);
+    }
+  };
+
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
@@ -176,7 +196,7 @@ const App = () => {
         handleClick={sortLikesDesc}
         text="sort by likes desc"
       />
-      {blogs.map((blog) => <Blog key={blog.id} blog={blog} like={likeBlog} />)}
+      {blogs.map((blog) => <Blog key={blog.id} blog={blog} like={likeBlog} del={deleteBlog} loggedInUser={user} />)}
       <br />
       <Footer />
       <br />

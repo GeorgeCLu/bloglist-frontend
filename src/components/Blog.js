@@ -2,7 +2,9 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react';
 
-const Blog = ({ blog, like }) => {
+const Blog = ({
+  blog, like, del, loggedInUser,
+}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -16,6 +18,12 @@ const Blog = ({ blog, like }) => {
   const { url } = blog;
   let { likes } = blog;
   const { id } = blog;
+  const { user } = blog;
+  // might have no user attached to blog
+  const blogUName = user.name;
+  const blogUsername = user.username;
+  const loggedinUName = loggedInUser.name;
+  const loggedinUsername = loggedInUser.username;
 
   const likeBlog = (event) => {
     likes += 1;
@@ -31,6 +39,17 @@ const Blog = ({ blog, like }) => {
     );
   };
 
+  const deleteBlog = (event) => {
+    event.preventDefault();
+    del({
+      title,
+      author,
+      url,
+      likes,
+    },
+    id);
+  };
+
   const [visible, setVisible] = useState(false);
 
   const hideWhenVisible = { display: visible ? 'none' : '' };
@@ -40,28 +59,58 @@ const Blog = ({ blog, like }) => {
     setVisible(!visible);
   };
 
-  return (
-    <div style={blogStyle}>
-      <div style={hideWhenVisible}>
-        {blog.title}
-        {' '}
-        {blog.author}
-        <button type="submit" onClick={toggleVisibility}>view</button>
+  if (blogUName === loggedinUName && blogUsername === loggedinUsername) {
+    return (
+      <div style={blogStyle}>
+        <div style={hideWhenVisible}>
+          {blog.title}
+          {' '}
+          {blog.author}
+          <button type="submit" onClick={toggleVisibility}>view</button>
+        </div>
+        <div style={showWhenVisible}>
+          {blog.title}
+          <button type="submit" onClick={toggleVisibility}>hide</button>
+          <br />
+          {blog.url}
+          <br />
+          {'likes '}
+          {blog.likes}
+          <button type="submit" onClick={likeBlog}>like</button>
+          <br />
+          {blog.author}
+          <br />
+          <button type="submit" onClick={deleteBlog}>remove</button>
+          <br />
+        </div>
       </div>
-      <div style={showWhenVisible}>
-        {blog.title}
-        <button type="submit" onClick={toggleVisibility}>hide</button>
-        <br />
-        {blog.url}
-        <br />
-        {'likes '}
-        {blog.likes}
-        <button type="submit" onClick={likeBlog}>like</button>
-        <br />
-        {blog.author}
+    );
+  // eslint-disable-next-line no-else-return
+  } else {
+    return (
+      <div style={blogStyle}>
+        <div style={hideWhenVisible}>
+          {blog.title}
+          {' '}
+          {blog.author}
+          <button type="submit" onClick={toggleVisibility}>view</button>
+        </div>
+        <div style={showWhenVisible}>
+          {blog.title}
+          <button type="submit" onClick={toggleVisibility}>hide</button>
+          <br />
+          {blog.url}
+          <br />
+          {'likes '}
+          {blog.likes}
+          <button type="submit" onClick={likeBlog}>like</button>
+          <br />
+          {blog.author}
+          <br />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default Blog;

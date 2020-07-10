@@ -25,6 +25,17 @@ const create = async (newObject) => {
   return response.data;
 };
 
+// delete  would be mix of create and update
+// delete a reserved word in JavaScript.
+const del = async (id) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const updateUrl = `${baseUrl}/${id}`;
+  const response = await axios.delete(updateUrl, config);
+  return response.data;
+};
+
 const update = (id, newObject) => {
   const updateUrl = `${baseUrl}/${id}`;
   const request = axios.put(updateUrl, newObject);
@@ -32,5 +43,5 @@ const update = (id, newObject) => {
 };
 
 export default {
-  getAll, create, update, setToken,
+  getAll, create, update, setToken, del,
 };
