@@ -11,7 +11,7 @@ import blogService from './services/blogs';
 import loginService from './services/login';
 
 const App = () => {
-  const [loginVisible, setLoginVisible] = useState(false);
+  // const [loginVisible, setLoginVisible] = useState(false);
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('some error happened...');
@@ -67,6 +67,58 @@ const App = () => {
       //   setErrorMessage(null);
       // }, 5000);
     }
+    // only possible to update likes not other fields without changing the backend
+    /* let duplicate = false;
+    for (let index = 0; index < blogs.length; index += 1) {
+      const blog = blogs[index];
+      if (blog.title === blogObject.title && blog.author === blogObject.author) {
+        duplicate = true;
+        console.log("duplicate")
+        console.log(blog.title)
+        console.log(blogObject.title)
+        try {
+          if (window.confirm(`${blogObject.title} by is already added to bloglist, replace the old url with the new one?`)) {
+            console.log("replace details confirmed")
+            console.log(blogObject)
+            console.log(blog.id)
+            blogService
+              .update(blog.id, blogObject)
+              .then((returnedBlog) => {
+                setBlogs(blogs.map((blog) => (blog.id !== blogObject.id ? blog : returnedBlog)));
+                setMessage(`updated ${blogObject.title} by  ${blogObject.author}`);
+                console.log("retuned blog")
+                console.log(returnedBlog)
+              });
+          }
+        } catch (exception) {
+          console.log('failed');
+          setMessage('Failed to replace');
+          // setTimeout(() => {
+          //   setErrorMessage(null);
+          // }, 5000);
+        }
+      }
+    }
+    if (duplicate !== true) {
+      console.log("not duplicate")
+      try {
+        blogFormRef.current.toggleVisibility();
+        blogService
+          .create(blogObject)
+          .then((returnedBlog) => {
+            setBlogs(blogs.concat(returnedBlog));
+            // then(response => {
+            // setNotes(notes.concat(response.data))
+            setMessage(`a new blog ${blogObject.title} by  ${blogObject.author} added`);
+          });
+      } catch (exception) {
+        console.log('failed');
+        setMessage('Failed to post');
+        // setTimeout(() => {
+        //   setErrorMessage(null);
+        // }, 5000);
+      }
+    } */
   };
 
   const likeBlog = (blogid, blogObject) => {

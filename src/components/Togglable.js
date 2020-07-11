@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 // display property is none if we do not want the component to be displayed:
 
@@ -13,6 +11,7 @@
 // that is used for defining functions in a component
 // which can be invoked from outside of the component.
 import React, { useState, useImperativeHandle } from 'react';
+import PropTypes from 'prop-types';
 
 const Togglable = React.forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
@@ -43,5 +42,11 @@ const Togglable = React.forwardRef((props, ref) => {
     </div>
   );
 });
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  children: PropTypes.object.isRequired,
+};
 
 export default Togglable;
